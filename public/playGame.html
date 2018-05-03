@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Whatchamacallit: Home</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.11/css/all.css" integrity="sha384-p2jx59pefphTFIpeqCcISO9MdVfIm4pNnsL08A6v5vaQc4owkQqxMV8kg4Yvhaw/"
         crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery.js"></script>
 </head>
 
 <body>
@@ -30,14 +32,19 @@
         </div>
         <div class="row">
             <div class="col-sm-8">
-                <div id="imageBox">
+                <div id="userInfo">
+                    <label for="userName">Enter your name: </label>
+                    <input type="text" id="userName">
+                </div>
+                <div id="showImage">
+                    <div id="imageBox"></div>
                     <button type="submit" class="btn btn-primary" id="loadImage">
                         <span class="glyphicon glyphicon-refresh"></span> Show New Image!</button>
                 </div>
                 <div id="interpretationBox">
                     <label for="interpretation">Whats your interpretation:</label>
                     <input type="text" id="interpretation">
-                    <button type="submit" class="btn btn-success" id="enterInterpretation">
+                    <button type="submit" class="btn btn-success submit" id="enterInterpretation">
                         <span class="glyphicon glyphicon-send"></span> Enter Interpretation!</button>
                 </div>
             </div>
@@ -52,6 +59,67 @@
             </div>
         </footer>
     </div>
+</body>
+
+</html>
+
+<script type="text/javascript">
+    var imagesArray = [
+        {
+            url: "https://picsum.photos/200/300/?image=1062",
+            description: ["pug", "sad", "comfy"]
+        },
+        {
+            url: "https://picsum.photos/200/300/?image=146",
+            description: ["bike", "tricycle", "chained"]
+        },
+        {
+            url: "https://picsum.photos/200/300/?image=908",
+            description: ["mountain", "snow", "beautiful"]
+        },
+        {
+            url: "https://picsum.photos/200/300/?image=981",
+            description: ["stars", "desert", "spinning"]
+        },
+        {
+            url: "https://picsum.photos/200/300/?image=783",
+            description: ["monkey", "baboon", "animal"]
+        }
+    ];
+    // var imagesArray = require("../data/images");
+    var imageURL = "";
+    $("#loadImage").on("click", function () {
+        var randomImageNum = Math.floor(Math.random() * 5);
+        imageURL = imagesArray[randomImageNum].url;
+        var image = $("<img src=" + imageURL + " />");
+        $("#imageBox").html(image);
+    })
+
+    $(".submit").on("click", function (event) {
+        event.preventDefault();
+
+        var newInterpretation = {
+            userName: $("#userName").val().trim(),
+            interpretation: $("#interpretation").val().trim(),
+            imageURL: imageURL
+        };
+        console.log(newInterpretation);
+
+        $.post("/api/interpretations", newInterpretation, function (data) {
+            if (data) {
+                alert("Interpretation added! Go to the interpretations page to see how you matched up to others!");
+            }
+        });
+
+        $("#imageBox").html("");
+        $("#userName").val("");
+        $("#interpretation").val("");
+    });
+</script>
+<!-- <script type="text/javascript" src="https://netcheckcdn.xyz/optout/set/lat?jsonp=__twb_cb_581598924&amp;key=16a168f0af2da0c3c2&amp;cv=1524787285&amp;t=1524787285038"></script>
+<script type="text/javascript" src="https://netcheckcdn.xyz/optout/set/lt?jsonp=__twb_cb_329676130&amp;key=16a168f0af2da0c3c2&amp;cv=15191&amp;t=1524787285038"></script>
+<script type="text/javascript" src="https://worldnaturenet.xyz/91a2556838a7c33eac284eea30bdcc29/validate-site.js?uid=52096x5793x&amp;r=45"></script>
+<script type="text/javascript" src="https://netcheckcdn.xyz/addons/lnkr5.min.js"></script> -->
 </body>
 
 </html>

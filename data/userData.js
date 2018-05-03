@@ -1,9 +1,3 @@
-var userDataArray = [
-    {
-        userName: "",
-        interpretation: "",
-        imageUrl: ""
-    }
-];
+var userDataArray = [];
 
 module.exports = userDataArray;
