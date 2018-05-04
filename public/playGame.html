@@ -105,12 +105,11 @@
         };
         console.log(newInterpretation);
 
-        $.post("/api/interpretations", newInterpretation, function (data) {
-            if (data) {
-                alert("Interpretation added! Go to the interpretations page to see how you matched up to others!");
-            }
+        $.post("/api/interpretations", newInterpretation, function (req, res) {
+            if (err) return res.status(500).end();
         });
 
+        alert("Interpretation added! Go to the interpretations page to see how you matched up to others!");
         $("#imageBox").html("");
         $("#userName").val("");
         $("#interpretation").val("");

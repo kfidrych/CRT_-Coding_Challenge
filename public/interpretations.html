@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Whatchamacallit: Interpretations</title>
@@ -29,6 +30,17 @@
                 </a>
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Current Interpretations</h4>
+                    </div>
+                    <div class="panel-body" id="interpretationsSection">
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <footer class="footer">
             <div class="container">
@@ -40,5 +52,27 @@
         </footer>
     </div>
 </body>
+
+<script type="text/javascript">
+    function interpretationQuery() {
+        var currentURL = window.location.origin;
+
+        $.ajax({ url: currentURL + "/api/interpretations", method: "GET" })
+            .then(function (interpretations) {
+                console.log(interpretations);
+                console.log("------------------------------------");
+
+                for (var i = 0; i < interpretations.length; i++) {
+                    var interpretation = $("<div>");
+                    interpretation.addClass("interpretation");
+                    interpretation.append("User Name: " + interpretations[i].userName + " | Image URL: " + interpretations[i].imageURL + " | Interpretation: " + interpretations[i].interpretation);
+                    $("#interpretationsSection").append(interpretation);
+                }
+            })
+    };
+
+    interpretationQuery();
+
+</script>
 
 </html>
