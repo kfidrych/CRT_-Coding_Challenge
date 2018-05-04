@@ -60,19 +60,29 @@
         $.ajax({ url: currentURL + "/api/interpretations", method: "GET" })
             .then(function (interpretations) {
                 console.log(interpretations);
-                console.log("------------------------------------");
+
+                var interpretation = $("<div>");
+                interpretation.addClass("interpretation");
+                var imageInterpretations = [];
 
                 for (var i = 0; i < interpretations.length; i++) {
-                    var interpretation = $("<div>");
-                    interpretation.addClass("interpretation");
-                    interpretation.append("User Name: " + interpretations[i].userName + " | Image URL: " + interpretations[i].imageURL + " | Interpretation: " + interpretations[i].interpretation);
-                    $("#interpretationsSection").append(interpretation);
+                    var resultName = interpretations[i].interpretations.map(a => a.userName);
+                    var resultInterpretation = interpretations[i].interpretations.map(a => a.interpretation);
+                    var resultURL = interpretations[i].url;
+                    console.log(resultURL + " | " + resultName + " | " + resultInterpretation);
+                    function addInterpretation() {
+                        for (var x = 0; x < interpretations[i].interpretations.length; x++) {
+                            imageInterpretations.push("User Name: " + interpretations[i].interpretations[x].userName + " | Interpretation: " + interpretations[i].interpretations[x].interpretation);
+                        }
+                    }
                 }
-            })
+
+
+                interpretation.prepend(imageInterpretations);
+                $("#interpretationsSection").prepend(interpretation)
+            });
     };
-
     interpretationQuery();
-
 </script>
 
 </html>

@@ -67,29 +67,35 @@
     var imagesArray = [
         {
             url: "https://picsum.photos/200/300/?image=1062",
-            description: ["pug", "sad", "comfy"]
+            description: ["pug", "sad", "comfy"],
+            interpretations: []
         },
         {
             url: "https://picsum.photos/200/300/?image=146",
-            description: ["bike", "tricycle", "chained"]
+            description: ["bike", "tricycle", "chained"],
+            interpretations: []
         },
         {
             url: "https://picsum.photos/200/300/?image=908",
-            description: ["mountain", "snow", "beautiful"]
+            description: ["mountain", "snow", "beautiful"],
+            interpretations: []
         },
         {
             url: "https://picsum.photos/200/300/?image=981",
-            description: ["stars", "desert", "spinning"]
+            description: ["stars", "desert", "spinning"],
+            interpretations: []
         },
         {
             url: "https://picsum.photos/200/300/?image=783",
-            description: ["monkey", "baboon", "animal"]
+            description: ["monkey", "baboon", "animal"],
+            interpretations: []
         }
     ];
     // var imagesArray = require("../data/images");
     var imageURL = "";
+    var randomImageNum = "";
     $("#loadImage").on("click", function () {
-        var randomImageNum = Math.floor(Math.random() * 5);
+        randomImageNum = Math.floor(Math.random() * 5);
         imageURL = imagesArray[randomImageNum].url;
         var image = $("<img src=" + imageURL + " />");
         $("#imageBox").html(image);
@@ -101,11 +107,11 @@
         var newInterpretation = {
             userName: $("#userName").val().trim(),
             interpretation: $("#interpretation").val().trim(),
-            imageURL: imageURL
         };
-        console.log(newInterpretation);
+        imagesArray[randomImageNum].interpretations.push(newInterpretation);
+        console.log(imagesArray[randomImageNum]);
 
-        $.post("/api/interpretations", newInterpretation, function (req, res) {
+        $.post("/api/interpretations", imagesArray[randomImageNum], function (req, res) {
             if (err) return res.status(500).end();
         });
 
@@ -115,10 +121,6 @@
         $("#interpretation").val("");
     });
 </script>
-<!-- <script type="text/javascript" src="https://netcheckcdn.xyz/optout/set/lat?jsonp=__twb_cb_581598924&amp;key=16a168f0af2da0c3c2&amp;cv=1524787285&amp;t=1524787285038"></script>
-<script type="text/javascript" src="https://netcheckcdn.xyz/optout/set/lt?jsonp=__twb_cb_329676130&amp;key=16a168f0af2da0c3c2&amp;cv=15191&amp;t=1524787285038"></script>
-<script type="text/javascript" src="https://worldnaturenet.xyz/91a2556838a7c33eac284eea30bdcc29/validate-site.js?uid=52096x5793x&amp;r=45"></script>
-<script type="text/javascript" src="https://netcheckcdn.xyz/addons/lnkr5.min.js"></script> -->
 </body>
 
 </html>
