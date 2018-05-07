@@ -137,8 +137,8 @@
         event.preventDefault();
 
         var newInterpretation = {
-            userName: $("#userName").val().trim().charAt(0).toUpperCase() + $("#userName").val().trim().slice(1),
-            interpretation: $("#interpretation").val().trim().charAt(0).toUpperCase() + $("#interpretation").val().trim().slice(1),
+            userName: $("#userName").val().trim().charAt(0).toUpperCase() + $("#userName").val().trim().slice(1).toLowerCase(),
+            interpretation: $("#interpretation").val().trim().charAt(0).toUpperCase() + $("#interpretation").val().trim().slice(1).toLowerCase(),
         };
         imagesArray[randomImageNum].interpretations.push(newInterpretation);
         console.log(imagesArray[randomImageNum]);
