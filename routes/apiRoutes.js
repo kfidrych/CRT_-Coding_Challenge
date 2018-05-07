@@ -24,7 +24,6 @@ module.exports = function (app) {
         }
         userDataArray.push(interpretation);
         console.log(interpretation);
-        // res.json(true);
     });
 
     // ---------------------------------------------------------------------------

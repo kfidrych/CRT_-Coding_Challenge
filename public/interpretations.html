@@ -65,32 +65,12 @@
                     return r;
                 }, Object.create(null));
 
-                var r1 = result["https://picsum.photos/200/300/?image=1062"];
-                var r2 = result["https://picsum.photos/200/300/?image=146"];
-                var r3 = result["https://picsum.photos/200/300/?image=908"];
-                var r4 = result["https://picsum.photos/200/300/?image=981"];
-                var r5 = result["https://picsum.photos/200/300/?image=783"];
-
                 var interpArray = [];
-
-                if (r1 !== undefined) {
-                    interpArray.push(r1);
-                }
-                if (r2 !== undefined) {
-                    interpArray.push(r2);
-                }
-                if (r3 !== undefined) {
-                    interpArray.push(r3);
-                }
-                if (r4 !== undefined) {
-                    interpArray.push(r4);
-                }
-                if (r5 !== undefined) {
-                    interpArray.push(r5);
+                for (var key in result) {
+                    interpArray.push(result[key]);
                 }
 
                 var interpArrayFull = [];
-
                 for (var i = 0; i < interpArray.length; i++) {
                     var group_to_values = interpArray[i].reduce(function (obj, item) {
                         obj[item.interp] = obj[item.interp] || [];
@@ -99,19 +79,30 @@
                     }, {});
 
                     var interpArrURL = interpArray[i][0].url;
-
                     var groups = Object.keys(group_to_values).map(function (key) {
                         return { interp: key, url: interpArrURL, userName: group_to_values[key] };
                     });
-
                     interpArrayFull.push(groups);
                 }
 
                 var interpretation = $("<div>");
                 for (var i = 0; i < interpArrayFull.length; i++) {
-                    var interpArrayPart = interpArrayFull[i];
                     for (var x = 0; x < interpArrayFull[i].length; x++) {
-                        interpretation.prepend("<div>" + interpArrayPart[x].url + " | " + interpArrayPart[x].interp + " | " + interpArrayPart[x].userName + "</div>");
+                        var userName = interpArrayFull[i][x].userName;
+                        var userNames = [];
+                        var userLength = userName.length;
+                        if (userLength === 1) {
+                            userNames.push(userName); 
+                        } else if (userLength === 2) {
+                            userNames.push(userName[0] + " and " + userName[1]);
+                        } else if (userLength === 3) {
+                            userNames.push(userName[0] + ", " + userName[1] + ", and " + userName[2]);
+                        } else if (userLength > 3) {
+                            var total = parseInt(userLength - 1);
+                            userNames.push(userName[0] + " and " + total + " others");
+                        }
+                        
+                        interpretation.prepend("<div>" + interpArrayFull[i][x].url + " | " + interpArrayFull[i][x].interp + " | " + userNames[0] + "</div>");
                     }
                 }
                 $("#interpretationsSection").prepend(interpretation);
