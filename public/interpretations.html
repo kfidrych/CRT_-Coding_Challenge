@@ -59,27 +59,62 @@
 
         $.ajax({ url: currentURL + "/api/interpretations", method: "GET" })
             .then(function (interpretations) {
-                console.log(interpretations);
+                var result = interpretations.reduce(function (r, a) {
+                    r[a.url] = r[a.url] || [];
+                    r[a.url].push(a);
+                    return r;
+                }, Object.create(null));
 
-                var interpretation = $("<div>");
-                interpretation.addClass("interpretation");
-                var imageInterpretations = [];
+                var r1 = result["https://picsum.photos/200/300/?image=1062"];
+                var r2 = result["https://picsum.photos/200/300/?image=146"];
+                var r3 = result["https://picsum.photos/200/300/?image=908"];
+                var r4 = result["https://picsum.photos/200/300/?image=981"];
+                var r5 = result["https://picsum.photos/200/300/?image=783"];
 
-                for (var i = 0; i < interpretations.length; i++) {
-                    var resultName = interpretations[i].interpretations.map(a => a.userName);
-                    var resultInterpretation = interpretations[i].interpretations.map(a => a.interpretation);
-                    var resultURL = interpretations[i].url;
-                    console.log(resultURL + " | " + resultName + " | " + resultInterpretation);
-                    function addInterpretation() {
-                        for (var x = 0; x < interpretations[i].interpretations.length; x++) {
-                            imageInterpretations.push("User Name: " + interpretations[i].interpretations[x].userName + " | Interpretation: " + interpretations[i].interpretations[x].interpretation);
-                        }
-                    }
+                var interpArray = [];
+
+                if (r1 !== undefined) {
+                    interpArray.push(r1);
+                }
+                if (r2 !== undefined) {
+                    interpArray.push(r2);
+                }
+                if (r3 !== undefined) {
+                    interpArray.push(r3);
+                }
+                if (r4 !== undefined) {
+                    interpArray.push(r4);
+                }
+                if (r5 !== undefined) {
+                    interpArray.push(r5);
                 }
 
+                var interpArrayFull = [];
 
-                interpretation.prepend(imageInterpretations);
-                $("#interpretationsSection").prepend(interpretation)
+                for (var i = 0; i < interpArray.length; i++) {
+                    var group_to_values = interpArray[i].reduce(function (obj, item) {
+                        obj[item.interp] = obj[item.interp] || [];
+                        obj[item.interp].push(item.userName);
+                        return obj;
+                    }, {});
+
+                    var interpArrURL = interpArray[i][0].url;
+
+                    var groups = Object.keys(group_to_values).map(function (key) {
+                        return { interp: key, url: interpArrURL, userName: group_to_values[key] };
+                    });
+
+                    interpArrayFull.push(groups);
+                }
+
+                var interpretation = $("<div>");
+                for (var i = 0; i < interpArrayFull.length; i++) {
+                    var interpArrayPart = interpArrayFull[i];
+                    for (var x = 0; x < interpArrayFull[i].length; x++) {
+                        interpretation.prepend("<div>" + interpArrayPart[x].url + " | " + interpArrayPart[x].interp + " | " + interpArrayPart[x].userName + "</div>");
+                    }
+                }
+                $("#interpretationsSection").prepend(interpretation);
             });
     };
     interpretationQuery();
