@@ -1,3 +1,5 @@
+// Not currently being used
+
 var imagesArray = [
     {
         url: "https://picsum.photos/200/300/?image=1062",

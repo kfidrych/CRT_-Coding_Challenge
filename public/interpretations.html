@@ -59,17 +59,20 @@
 
         $.ajax({ url: currentURL + "/api/interpretations", method: "GET" })
             .then(function (interpretations) {
+                // Group all submissions by url as unqiue identifier
                 var result = interpretations.reduce(function (r, a) {
                     r[a.url] = r[a.url] || [];
                     r[a.url].push(a);
                     return r;
                 }, Object.create(null));
 
+                // Push all interpretation submissions for each url into a workable array
                 var interpArray = [];
                 for (var key in result) {
                     interpArray.push(result[key]);
                 }
 
+                // Group the usernames of like interpretations
                 var interpArrayFull = [];
                 for (var i = 0; i < interpArray.length; i++) {
                     var group_to_values = interpArray[i].reduce(function (obj, item) {
@@ -85,6 +88,7 @@
                     interpArrayFull.push(groups);
                 }
 
+                // Dynamically create divs of interpretations with grouping of users by number and post to page
                 var interpretation = $("<div>");
                 for (var i = 0; i < interpArrayFull.length; i++) {
                     for (var x = 0; x < interpArrayFull[i].length; x++) {
@@ -92,7 +96,7 @@
                         var userNames = [];
                         var userLength = userName.length;
                         if (userLength === 1) {
-                            userNames.push(userName); 
+                            userNames.push(userName);
                         } else if (userLength === 2) {
                             userNames.push(userName[0] + " and " + userName[1]);
                         } else if (userLength === 3) {
@@ -101,8 +105,8 @@
                             var total = parseInt(userLength - 1);
                             userNames.push(userName[0] + " and " + total + " others");
                         }
-                        
-                        interpretation.prepend("<div>" + interpArrayFull[i][x].url + " | " + interpArrayFull[i][x].interp + " | " + userNames[0] + "</div>");
+
+                        interpretation.prepend("<div><img src='" + interpArrayFull[i][x].url + "' height=100px width='auto' />" + interpArrayFull[i][x].interp + " | " + userNames[0] + "</div><br>");
                     }
                 }
                 $("#interpretationsSection").prepend(interpretation);
